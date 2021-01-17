@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 namespace Matest
 {
     /// <summary>
-    /// Generate examples
+    /// Generates examples
     /// </summary>
-    class ExampleGenerator
+    abstract class ExampleGenerator
     {
+        // Contains a string name of a sign
+        private static string operation;
+
+        // Array with signs
+        private static char[] signs = { '+', '-', '*', '/', '^', 'V' };
+
         /// <summary>
-        /// Generate new example
+        /// Generates new example
         /// </summary>
         /// <returns></returns>
         public static Example NewExample()
@@ -20,40 +26,71 @@ namespace Matest
             // Sign of an example
             char sign = GetSign();
 
-            /* TODO: создать файл с настройками
-             * реализовать получение мин и макс значений у знака
-             * реализовать генерацию операндов по настройкам
-             */
+            int minValue = Settings.IntSettings["min" + operation];
+            int maxValue = Settings.IntSettings["max" + operation];
 
-            return null;
+            var rnd = new Random();
+            // First operand
+            int op1 = rnd.Next(minValue, maxValue);
 
+            // Second operand
+            int op2 = 0;
+            // Checks
+            if (sign == '/') // Gerenrates second operand for division example
+            {
+                while (op2 == 0 || op1 % op2 != 0)
+                {
+                    op2 = rnd.Next(minValue, maxValue);
+                }
+            }
+            else if (sign == 'V') // Genetates operand for sqrt example
+            {
+                op1 *= op1;
+            }
+            else 
+            {
+                op2 = rnd.Next(minValue, maxValue);
+
+                // If negative result for '-' disabled
+                if (sign == '-' && !Settings.BoolSettings["enableNegativeResult"]
+                    && op2 > op1)
+                    op2 = rnd.Next(0, op1);
+            }
+
+            // TODO: пофиксить баг с генерацией примеров sqr
+            var ex = new Example(op1, op2, sign); 
+
+            return ex;
         }
 
         /// <summary>
-        /// Generate random sign of an example
+        /// Generates random sign of an example
         /// </summary>
         /// <returns></returns>
         private static char GetSign()
         {
-            char sign = '+';
+            // Contains operations
+            Dictionary<char, string> operations = new Dictionary<char, string>();
+            operations.Add('+', "Plus");
+            operations.Add('-', "Minus");
+            operations.Add('*', "Multi");
+            operations.Add('/', "Divide");
+            operations.Add('^', "Sqr");
+            operations.Add('V', "Sqrt");
 
-            // Random int value, wich convert to char
-            var rnd = new Random();
-            int s = rnd.Next(1, 5);
+            char sign;
 
-            switch (s)
+            while (true)
             {
-                case 1:
-                    sign = '+';
-                    break;
-                case 2:
-                    sign = '-';
-                    break;
-                case 3:
-                    sign = '*';
-                    break;
-                case 4:
-                    sign = '/';
+                // Random int value, which convertd to a sign
+                var rnd = new Random();
+                int s = rnd.Next(0, 6);
+
+                sign = signs[s];
+                operation = operations[sign];
+
+                // If this sign is active
+                if (Settings.BoolSettings["active" + operation])
                     break;
             }
 

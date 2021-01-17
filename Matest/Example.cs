@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Matest
 {
     /// <summary>
-    /// Contain example
+    /// Contains example
     /// </summary>
     class Example
     {
@@ -27,6 +27,10 @@ namespace Matest
         /// Sign of an example
         /// </summary>
         public char Sign { get; }
+        /// <summary>
+        /// Answer of an example
+        /// </summary>
+        public int Answer { get; }
 
         public Example(int op1, int op2, char sign)
         {
@@ -34,9 +38,46 @@ namespace Matest
             Operand2 = op2;
             Sign = sign;
 
-            ExampleStr = $"{Operand1} {Sign} {Operand2}";
+            // Get example string
+            if (Sign == '^')
+                ExampleStr = $"{Operand1} {Sign} 2";
+            else if (Sign == 'V')
+                ExampleStr = $"√{Operand1}";
+            else
+                ExampleStr = $"{Operand1} {Sign} {Operand2}";
+
+            // Set answer
+            switch (Sign)
+            {
+                case '+':
+                    Answer = Operand1 + Operand2;
+                    break;
+
+                case '-':
+                    Answer = Operand1 - Operand2;
+                    break;
+
+                case '*':
+                    Answer = Operand1 * Operand2;
+                    break;
+
+                case '/':
+                    Answer = Operand1 / Operand2;
+                    break;
+
+                case '^':
+                    Answer = Operand1 * Operand1;
+                    break;
+
+                case 'V':
+                    Answer = (int)Math.Sqrt(Operand1);
+                    break;
+            }
         }
 
-
+        public override string ToString()
+        {
+            return ExampleStr;
+        }
     }
 }

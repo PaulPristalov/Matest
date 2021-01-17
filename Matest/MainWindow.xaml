@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Matest"
         mc:Ignorable="d"
-        Title="MainWindow" Height="360" Width="560">
+        Title="Matest" Height="360" Width="560">
 
     <Border Padding="10"
             Background="#dddd">
@@ -18,20 +18,48 @@
                        FontWeight="Bold"
                        HorizontalAlignment="Center"/>
 
-            <!-- Option button -->
-            <Button Content="Settings"
-                    FontSize="16"
-                    Width="100"
-                    Padding="3"
-                    Margin="10"
-                    HorizontalAlignment="Left"/>
+            <!-- Buttons -->
+            <Grid>
 
-            <!-- Counter of examples-->
-            <TextBlock x:Name="ExampleCounterText"
-                       Text="0 / 0"
-                       FontSize="18"
-                       Margin="0 20 0 10"/>
-            
+                <!-- Settings button -->
+                <Button Content="Settings"
+                        Click="Settings_Button_Click"
+                        FontSize="16"
+                        Width="100"
+                        Padding="3"
+                        Margin="10"
+                        HorizontalAlignment="Left"/>
+
+                <!-- Restart button -->
+                <Button Content="Restart"
+                        Click="Restart_Button_Click"
+                        FontSize="16"
+                        Width="100"
+                        Padding="3"
+                        Margin="10"
+                        HorizontalAlignment="Right"/>
+
+            </Grid>
+
+            <!-- Counters -->
+            <Grid>
+
+                <!-- Counter of examples -->
+                <TextBlock x:Name="ExampleCounterText"
+                           Text="0 / 0"
+                           FontSize="18"
+                           Margin="20 20 0 10"
+                           HorizontalAlignment="Left"/>
+
+                <!-- Timer -->
+                <TextBlock x:Name="TimerText"
+                           Text="0"
+                           FontSize="18"
+                           Margin="0 20 20 10"
+                           HorizontalAlignment="Right"/>
+
+            </Grid>
+
             <!-- Example and answer -->
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -52,6 +80,7 @@
 
                 <!-- Answer -->
                 <TextBox x:Name="Answer"
+                         KeyDown="Answer_KeyDown"
                          Grid.Column="1"
                          FontSize="30"
                          Margin="15 0 0 0"
