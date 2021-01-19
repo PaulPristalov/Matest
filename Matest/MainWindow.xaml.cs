@@ -81,7 +81,7 @@ namespace Matest
         public void CheckAnswer(string answ)
         {
             // If user has entered not a number
-            if (!int.TryParse(answ, out int a))
+            if (!double.TryParse(answ, out double a))
             {
                 MessageBox.Show("Incorrect input!");
                 return;
