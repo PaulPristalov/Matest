@@ -18,11 +18,11 @@ namespace Matest
         /// <summary>
         /// First Operand
         /// </summary>
-        public int Operand1 { get; }
+        public double Operand1 { get; }
         /// <summary>
         /// Second operand
         /// </summary>
-        public int Operand2 { get; }
+        public double Operand2 { get; }
         /// <summary>
         /// Sign of an example
         /// </summary>
@@ -30,9 +30,9 @@ namespace Matest
         /// <summary>
         /// Answer of an example
         /// </summary>
-        public int Answer { get; }
+        public double Answer { get; }
 
-        public Example(int op1, int op2, char sign)
+        public Example(double op1, double op2, char sign)
         {
             Operand1 = op1;
             Operand2 = op2;

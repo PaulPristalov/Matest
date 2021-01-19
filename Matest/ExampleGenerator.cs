@@ -17,6 +17,8 @@ namespace Matest
         // Array with signs
         private static char[] signs = { '+', '-', '*', '/', '^', 'V' };
 
+        private static Random rnd = new Random();
+
         /// <summary>
         /// Generates new example
         /// </summary>
@@ -29,35 +31,60 @@ namespace Matest
             int minValue = Settings.IntSettings["min" + operation];
             int maxValue = Settings.IntSettings["max" + operation];
 
-            var rnd = new Random();
             // First operand
-            int op1 = rnd.Next(minValue, maxValue);
+            double op1 = rnd.Next(minValue, maxValue);
 
             // Second operand
-            int op2 = 0;
+            double op2 = 0;
             // Checks
-            if (sign == '/') // Gerenrates second operand for division example
+            switch (sign) 
             {
-                while (op2 == 0 || op1 % op2 != 0)
-                {
+                case '/': // Gerenrates second operand for division example
+                    while (op2 == 0 || op1 % op2 != 0 ||
+                        (Settings.BoolSettings["enableDecimalNumbers"] && 
+                        (op1 / op2) % 0.1 == 0))
+                    {
+                        op2 = rnd.Next(minValue, maxValue);
+                    }
+                    break;
+
+                case 'V': // Genetates operand for sqrt example
+                    op1 *= op1;
+                    break;
+
+                default:
                     op2 = rnd.Next(minValue, maxValue);
-                }
-            }
-            else if (sign == 'V') // Genetates operand for sqrt example
-            {
-                op1 *= op1;
-            }
-            else 
-            {
-                op2 = rnd.Next(minValue, maxValue);
 
-                // If negative result for '-' disabled
-                if (sign == '-' && !Settings.BoolSettings["enableNegativeResult"]
-                    && op2 > op1)
-                    op2 = rnd.Next(0, op1);
+                    // Generate decimal part
+                    if (sign != '^' && Settings.BoolSettings["enableDecimalNumbers"])
+                    {
+                        if (sign == '*')
+                        {
+                            op1 += GetRandomDouble(1);
+                            op2 += GetRandomDouble(1);
+                        }
+                        else
+                        {
+                            op1 += GetRandomDouble(2);
+                            op2 += GetRandomDouble(2);
+                        }
+                    }
+
+                    // If negative result for '-' disabled
+                    if (sign == '-' && !Settings.BoolSettings["enableNegativeResult"]
+                        && op2 > op1)
+                    {
+                        if (Settings.BoolSettings["enableDecimalNumbers"])
+                        {
+                            op2 = rnd.Next(0, (int)op1 - 1);
+                            op2 += GetRandomDouble(2);
+                        }
+                        else
+                            op2 = rnd.Next(0, (int)op1);
+                    }
+                    break;
             }
 
-            // TODO: пофиксить баг с генерацией примеров sqr
             var ex = new Example(op1, op2, sign); 
 
             return ex;
@@ -95,6 +122,16 @@ namespace Matest
             }
 
             return sign;
+        }
+
+        /// <summary>
+        /// Returns rounded by decimals random float number from 0 to 1
+        /// </summary>
+        /// <param name="decimals"></param>
+        /// <returns></returns>
+        private static double GetRandomDouble(int decimals)
+        {
+            return Math.Round((double)rnd.NextDouble(), decimals);
         }
     }
 }

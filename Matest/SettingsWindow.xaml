@@ -74,6 +74,30 @@
 
                         </Grid>
 
+                        <!-- Enable decimal numbers -->
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Enable decimal numbers"
+                                       FontSize="14"
+                                       Background="LightGray"
+                                       TextAlignment="Center"
+                                       Margin="5"
+                                       Padding="2"/>
+
+                            <CheckBox x:Name="enableDecimalNumbers"
+                                      Grid.Column="1"
+                                      FontSize="14"
+                                      VerticalAlignment="Center"
+                                      Margin="5"
+                                      Padding="2"/>
+
+                        </Grid>
+
                     </StackPanel>
                 </TabItem>
                 

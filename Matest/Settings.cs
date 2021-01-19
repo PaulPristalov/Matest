@@ -65,7 +65,7 @@ namespace Matest
                 IntSettings.Add("maxSqr", 20);
 
                 IntSettings.Add("minSqrt", 0);
-                IntSettings.Add("maxSqrt", 400);
+                IntSettings.Add("maxSqrt", 20);
                 #endregion
 
                 #region Bool settings
@@ -77,6 +77,8 @@ namespace Matest
                 BoolSettings.Add("activeSqrt", true);
 
                 BoolSettings.Add("enableNegativeResult", true);
+                BoolSettings.Add("enableDecimalNumbers", false);
+
                 #endregion
             }
             finally
