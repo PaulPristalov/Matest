@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
+using System.Resources;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Matest
 {
@@ -19,6 +11,10 @@ namespace Matest
     /// </summary>
     public partial class SettingsWindow : Window
     {
+        private static CultureInfo culture = CultureInfo.CreateSpecificCulture("en-us");
+        private static ResourceManager resMan = new ResourceManager(
+            "Matest.Localization.Language", typeof(SettingsWindow).Assembly);
+
         public SettingsWindow()
         {
             InitializeComponent();
@@ -61,29 +57,29 @@ namespace Matest
                             var checkbox = (CheckBox)el;
 
                             Settings.BoolSettings[checkbox.Name] = (bool)checkbox.IsChecked;
-
-                            // If all active examle is off
-                            bool isExamplesActive = Settings.BoolSettings["activePlus"] ||
-                                Settings.BoolSettings["activeMinus"] ||
-                                Settings.BoolSettings["activeMulti"] ||
-                                Settings.BoolSettings["activeDivide"] ||
-                                Settings.BoolSettings["activeSqr"] ||
-                                Settings.BoolSettings["activeSqrt"];
-
-                            if (!isExamplesActive)
-                            {
-                                MessageBox.Show("You must to active at least one kind of examples");
-                                // By default active plus
-                                Settings.BoolSettings["activePlus"] = true;
-                                return;
-                            }
                         }
                     }
                 }
             }
 
+            // If all active examle is off
+            bool isExamplesActive = Settings.BoolSettings["activePlus"] ||
+                Settings.BoolSettings["activeMinus"] ||
+                Settings.BoolSettings["activeMulti"] ||
+                Settings.BoolSettings["activeDivide"] ||
+                Settings.BoolSettings["activeSqr"] ||
+                Settings.BoolSettings["activeSqrt"];
+
+            if (!isExamplesActive)
+            {
+                MessageBox.Show(resMan.GetString("ActiveExamples", culture));
+                // By default active plus
+                Settings.BoolSettings["activePlus"] = true;
+                return;
+            }
+
             Settings.Save();
-            MessageBox.Show("Settigs successfuly saved");
+            MessageBox.Show(resMan.GetString("Saved", culture));
         }
 
         /// <summary>
@@ -124,16 +120,15 @@ namespace Matest
         /// <returns></returns>
         private static int Check(TextBox tb, out bool success)
         {
-            int value = 0;
             success = true;
 
             // If input is a number
-            if (int.TryParse(tb.Text, out value))
+            if (int.TryParse(tb.Text, out int value))
             {
                 // If sqrt value below 0
                 if (tb.Name.Contains("Sqrt") && value < 0)
                 {
-                    MessageBox.Show("Root can't be below 0");
+                    MessageBox.Show(resMan.GetString("RootBelow0", culture));
                     success = false;
                 }
 
@@ -141,20 +136,20 @@ namespace Matest
                 if (tb.Name.Contains("max") &&
                     value < Settings.IntSettings["min" + tb.Name.Substring(3)])
                 {
-                    MessageBox.Show("Max value can't be below than min");
+                    MessageBox.Show(resMan.GetString("MaxMin", culture));
                     success = false;
                 }
 
                 // If example count below or equals 0
                 if (tb.Name == "ExamplesCount" && value <= 0)
                 {
-                    MessageBox.Show("Number of examples can't be below or equals 0");
+                    MessageBox.Show(resMan.GetString("NumOfExamplesBelow0", culture));
                     success = false;
                 }
             }
             else
             {
-                MessageBox.Show("Incorrect input");
+                MessageBox.Show(resMan.GetString("IncorrectInput", culture));
                 success = false;
             }
 

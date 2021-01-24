@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Matest
 {
@@ -50,19 +46,19 @@ namespace Matest
             switch (Sign)
             {
                 case '+':
-                    Answer = Operand1 + Operand2;
+                    Answer = Math.Round(Operand1 + Operand2, 2);
                     break;
 
                 case '-':
-                    Answer = Operand1 - Operand2;
+                    Answer = Math.Round(Operand1 - Operand2, 2);
                     break;
 
                 case '*':
-                    Answer = Operand1 * Operand2;
+                    Answer = Math.Round(Operand1 * Operand2, 2);
                     break;
 
                 case '/':
-                    Answer = Operand1 / Operand2;
+                    Answer = Math.Round(Operand1 / Operand2, 2);
                     break;
 
                 case '^':

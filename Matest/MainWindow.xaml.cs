@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
+using System.Resources;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace Matest
@@ -28,6 +19,10 @@ namespace Matest
 
         private Example ex; // Current example
         private DispatcherTimer dt; // Timer
+
+        private CultureInfo culture = CultureInfo.CreateSpecificCulture("en-us");
+        private ResourceManager resMan = new ResourceManager(
+            "Matest.Localization.Language", typeof(MainWindow).Assembly);
 
         public MainWindow()
         {
@@ -83,13 +78,13 @@ namespace Matest
             // If user has entered not a number
             if (!double.TryParse(answ, out double a))
             {
-                MessageBox.Show("Incorrect input!");
+                MessageBox.Show(resMan.GetString("IncorrectInput", culture));
                 return;
             }
 
             // If answer is wrong
             if (a != ex.Answer)
-                MessageBox.Show("Wrong answer! Answer is " + ex.Answer);
+                MessageBox.Show(resMan.GetString("WrongAnswer", culture) + ex.Answer);
             else
                 rightAnswers++;
 
@@ -97,8 +92,8 @@ namespace Matest
             if (exCounter == Settings.IntSettings["ExamplesCount"])
             {
                 dt.Stop();
-                MessageBox.Show($"Your result: {rightAnswers} / {numberOfExamples}\n" +
-                    $"Time: {timer} seconds");
+                MessageBox.Show($"{resMan.GetString("Result", culture)}: {rightAnswers} / {numberOfExamples}\n" +
+                    $"{resMan.GetString("Time", culture)}: {timer} s");
                 Restart();
             }
             else
