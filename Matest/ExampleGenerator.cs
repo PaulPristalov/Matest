@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Matest
 {
     /// <summary>
     /// Generates examples
     /// </summary>
-    abstract class ExampleGenerator
+    static class ExampleGenerator
     {
         // Contains a string name of a sign
         private static string operation;
 
         // Array with signs
-        private static char[] signs = { '+', '-', '*', '/', '^', 'V' };
+        private static readonly char[] signs = { '+', '-', '*', '/', '^', 'V' };
 
         private static Random rnd = new Random();
 
@@ -40,9 +37,7 @@ namespace Matest
             switch (sign) 
             {
                 case '/': // Gerenrates second operand for division example
-                    while (op2 == 0 || op1 % op2 != 0 ||
-                        (Settings.BoolSettings["enableDecimalNumbers"] && 
-                        (op1 / op2) % 0.1 == 0))
+                    while (op2 == 0 || op1 % op2 != 0)
                     {
                         op2 = rnd.Next(minValue, maxValue);
                     }
@@ -71,16 +66,14 @@ namespace Matest
                     }
 
                     // If negative result for '-' disabled
-                    if (sign == '-' && !Settings.BoolSettings["enableNegativeResult"]
+                    while (sign == '-' && !Settings.BoolSettings["enableNegativeResult"]
                         && op2 > op1)
                     {
+                        op2 = rnd.Next(minValue, (int)op1);
                         if (Settings.BoolSettings["enableDecimalNumbers"])
                         {
-                            op2 = rnd.Next(0, (int)op1 - 1);
                             op2 += GetRandomDouble(2);
                         }
-                        else
-                            op2 = rnd.Next(0, (int)op1);
                     }
                     break;
             }

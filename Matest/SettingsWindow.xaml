@@ -74,6 +74,13 @@
 
                         </Grid>
 
+                        <!-- Warning -->
+                        <Grid>
+                            <TextBlock Text="2 decimals in addition and substraction and 1 decimal in multiply!"
+                                       FontSize="16"
+                                       Margin="7"
+                                       TextWrapping="Wrap"/>
+                        </Grid>
                         <!-- Enable decimal numbers -->
                         <Grid>
 
