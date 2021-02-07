@@ -5,7 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Matest"
         mc:Ignorable="d"
-        Title="Matest settings" Height="360" Width="560">
+        Title="Matest settings"
+        Height="360"
+        Width="560"
+        MinHeight="360"
+        MinWidth="560">
 
     <Border Padding="15">
         <StackPanel>
