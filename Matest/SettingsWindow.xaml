@@ -55,6 +55,34 @@
 
                     <StackPanel Margin="10 0">
 
+                        <!-- Language -->
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Language"
+                                       FontSize="14"
+                                       Background="LightGray"
+                                       TextAlignment="Center"
+                                       Margin="5"
+                                       Padding="2"/>
+
+                            <ComboBox SelectionChanged="ComboBox_SelectionChanged"
+                                      Grid.Column="1"
+                                      SelectedIndex="0"
+                                      FontSize="14"
+                                      VerticalAlignment="Center"
+                                      Margin="5"
+                                      Padding="2">
+
+                                <ComboBoxItem>English</ComboBoxItem>
+                                <ComboBoxItem>Russian</ComboBoxItem>
+                            </ComboBox>
+                        </Grid>
+                        
                         <!-- Number of examples -->
                         <Grid>
 
