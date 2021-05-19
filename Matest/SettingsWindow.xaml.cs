@@ -11,7 +11,7 @@ namespace Matest
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        private static CultureInfo culture = CultureInfo.CreateSpecificCulture("en-us");
+        private static CultureInfo culture = CultureInfo.CreateSpecificCulture(Settings.Culture);
         private static ResourceManager resMan = new ResourceManager(
             "Matest.Localization.Language", typeof(SettingsWindow).Assembly);
 
@@ -27,6 +27,12 @@ namespace Matest
             var mainWindow = new MainWindow();
             mainWindow.Show();
             Hide();
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string input = ((ComboBox)sender).SelectedItem.ToString();
+            Settings.Culture = input.Substring(input.LastIndexOf(' ') + 1);
         }
 
         private void Save_Button_Click(object sender, RoutedEventArgs e)

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 
 namespace Matest
 {
-    static class Settings
+    abstract class Settings
     {
         // Path to settings file
         private const string path = @"C:\Users\Administrator\AppData\Roaming\MatestSettings.bin";
@@ -23,6 +24,30 @@ namespace Matest
         public static Dictionary<string, bool> BoolSettings =
             new Dictionary<string, bool>();
 
+
+        /// <summary>
+        /// The string that contains current culture of application
+        /// </summary>
+
+        private static string culture;
+
+        public static string Culture
+        {
+            get { return  culture; }
+            set
+            {
+                switch (value)
+                {
+                    case "Russian":
+                        culture = "ru-ru";
+                        break;
+                    default:
+                        culture = "en-us";
+                        break;
+                }
+            }
+        }
+
         // Settings dictionaries initialization
         static Settings()
         {
@@ -34,11 +59,12 @@ namespace Matest
                 {
                     // Get settings tuple
                     var dics = binFormatter.Deserialize(file) as
-                         (Dictionary<string, int>, Dictionary<string, bool>)?;
+                         (Dictionary<string, int>, Dictionary<string, bool>, string)?;
 
                     // Set tuple's value to the settings dictionaries
                     IntSettings = dics.Value.Item1;
                     BoolSettings = dics.Value.Item2;
+                    Culture = dics.Value.Item3;
                 }
             }
             // Set and save default int settings, if file not founded
@@ -76,8 +102,9 @@ namespace Matest
 
                 BoolSettings.Add("enableNegativeResult", true);
                 BoolSettings.Add("enableDecimalNumbers", false);
-
                 #endregion
+
+                Culture = "English";
             }
             finally
             {
@@ -94,7 +121,7 @@ namespace Matest
             // Saving settings
             using (var file = new FileStream(path, FileMode.OpenOrCreate))
             {
-                var dics = (IntSettings, BoolSettings);
+                var dics = (IntSettings, BoolSettings, Culture);
                 binFormatter.Serialize(file, dics);
             }
         }

@@ -20,7 +20,7 @@ namespace Matest
         private Example ex; // Current example
         private DispatcherTimer dt; // Timer
 
-        private CultureInfo culture = CultureInfo.CreateSpecificCulture("en-us");
+        private CultureInfo culture = CultureInfo.CreateSpecificCulture(Settings.Culture);
         private ResourceManager resMan = new ResourceManager(
             "Matest.Localization.Language", typeof(MainWindow).Assembly);
 
